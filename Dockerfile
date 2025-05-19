@@ -1,5 +1,7 @@
 # Start with a base image containing Java runtime
 FROM maven:3.8.5-openjdk-17 AS builder
+COPY . .
+RUN mvn clean install -DskipTests
 # Add Maintainer Info
 LABEL maintainer="khoana1@vietcapitalbank.com"
 
@@ -10,7 +12,10 @@ VOLUME /opt/logs
 EXPOSE 1991
 
 # The application's jar file
-ARG JAR_FILE=target/digimi-universal.jar
-ADD ${JAR_FILE} app.jar
+#ARG JAR_FILE=target/digimi-universal.jar
+#ADD ${JAR_FILE} app.jar
 
-ENTRYPOINT ["java","-Dotel.metrics.exporter=none","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
+FROM openjdk:17-jdk-slim
+COPY --from=builder /target/*.jar app.jar
+
+ENTRYPOINT ["java","-jar","/app.jar"]
