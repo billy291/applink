@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Web Server</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        img {
+            max-width: 80%;
+            height: auto;
+        }
+    </style>
+    <script>
+        function getQueryParam(param){
+            const urlParam = new URLSearchParams(window.location.search);
+            return urlParam.get(param);
+        }
+        function logToServer(message, level = "info") {
+            var logUrl = "/write-log";
+            var params = new URLSearchParams({ message: message, level: level });
+
+            fetch(logUrl + "?" + params.toString(), {
+                method: "POST"
+            }).catch(error => console.error("Failed to log:", error));
+        }
+        async function getLinksFromServer() {
+            try {
+                const response = await fetch("/fallback/get-links");
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error("Failed to fetch links:", error);
+                return null;
+            }
+        }
+        async function redirectToApp() {
+            logToServer("Starting redirect to app...", "info");
+            const links = await getLinksFromServer();
+            if (!links)
+                return;
+
+            try {
+                //var id = getQueryParam("installId"); // Lấy ID từ URL
+                //logToServer("param id: "+id, "info");
+                // if (id) {
+                //     localStorage.setItem("installId", id); // Lưu vào Local Storage
+                // }
+
+                var deeplinkUrl = document.getElementById("deeplinkUrl").getAttribute("data-url");
+                logToServer("Trying to open app with link: "+deeplinkUrl, "info");
+                window.location.href = deeplinkUrl;
+
+                setTimeout(() => {
+                    //logToServer("Checking device type for fallback...", "info");
+                    if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+                        //logToServer("Redirecting to App Store...", "info");
+                        window.location.href = links.ios;
+                    } else if (/Android/.test(navigator.userAgent)) {
+                        //logToServer("Redirecting to Google Play", "info");
+                        window.location.href = links.android;
+                    }else{
+                        //logToServer("Redirecting to fallback website...", "info");
+                        window.location.href = links.desktop;
+                    }
+                }, 1000);
+
+            } catch (error) {
+                logToServer("Error retrieving app link: " + error.message, "error");
+            }
+        }
+    </script>
+</head>
+<body onload="redirectToApp()">
+<img src="/images/logo.png" alt="logo">
+<span id="deeplinkUrl" th:text="${deeplinkUrl}" th:attr="data-url=${deeplinkUrl}" style="display: none;"></span>
+</body>
+</html>

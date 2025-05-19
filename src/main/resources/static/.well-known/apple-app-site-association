@@ -1,0 +1,11 @@
+{
+  "applinks": {
+       "apps": [],
+        "details": [
+           {
+               "appID":"Q9U38268M8.bvb.digimi",
+               "paths":[ "*", "/*" ]
+           }
+         ]
+    }
+}

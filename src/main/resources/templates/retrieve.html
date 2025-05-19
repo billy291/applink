@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    function sendInstallIdToApp() {
+      var deeplinkSchema = document.getElementById("deeplinkSchema").getAttribute("data-url");
+      let installId = localStorage.getItem("installId") || sessionStorage.getItem("installId");
+
+      if (installId) {
+        window.location.href = deeplinkSchema + "://installId?id=" + installId;
+      } else {
+        document.body.innerHTML = "<h3>No Install ID Found</h3>";
+        window.location.href = deeplinkSchema + "://none";
+      }
+    }
+  </script>
+</head>
+<body onload="sendInstallIdToApp()">
+<span id="deeplinkSchema" th:text="${deeplinkSchema}" th:attr="data-url=${deeplinkSchema}" style="display: none;"></span>
+
+</body>
+</html>

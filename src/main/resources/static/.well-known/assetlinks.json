@@ -1,0 +1,29 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "vn.banvietbank.mobilebanking",
+      "sha256_cert_fingerprints": [
+        "CC:18:08:13:E4:DE:A1:94:C6:DD:B5:B6:16:D9:DA:A9:71:F1:BA:B7:F5:C5:EB:37:B7:C8:4D:8C:E0:85:CF:5E",
+        "02:A2:1B:A4:EE:42:93:47:F0:1C:72:BD:D6:A5:B0:B6:D5:98:82:58:AC:9A:DC:C9:24:9C:E9:4B:37:6A:4A:22"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "vn.banvietbank.mobilebanking.uat",
+      "sha256_cert_fingerprints": [
+        "CC:18:08:13:E4:DE:A1:94:C6:DD:B5:B6:16:D9:DA:A9:71:F1:BA:B7:F5:C5:EB:37:B7:C8:4D:8C:E0:85:CF:5E",
+        "02:A2:1B:A4:EE:42:93:47:F0:1C:72:BD:D6:A5:B0:B6:D5:98:82:58:AC:9A:DC:C9:24:9C:E9:4B:37:6A:4A:22"
+      ]
+    }
+  }
+]
+
