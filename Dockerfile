@@ -1,5 +1,5 @@
 # Start with a base image containing Java runtime
-FROM 172.27.5.95:5000/openjdk:17
+FROM maven:3.8.5-openjdk-17 AS builder
 # Add Maintainer Info
 LABEL maintainer="khoana1@vietcapitalbank.com"
 
