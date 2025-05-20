@@ -30,7 +30,7 @@ public class DeepLinkController {
     }
 
     @GetMapping(value = "/retrieve-id", produces = MediaType.TEXT_HTML_VALUE)
-    public String retrieveInstallId(HttpServletRequest servletRequest,Model model) throws Exception {
+    public String retrieveInstallId(HttpServletRequest servletRequest, Model model) throws Exception {
         model.addAttribute("deeplinkSchema", deepLinkService.getdigimiSchema(servletRequest));
         return "retrieve";
     }
