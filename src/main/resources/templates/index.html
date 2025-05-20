@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <title>Deeplink Demo</title>
-    <script>
+    <!-- <script>
       window.onload = function () {
         const appScheme = "bvb.digimi://open";
         const appStoreUrl = "https://apps.apple.com/app/id1526444697";
@@ -25,7 +25,7 @@
             window.location = "bvb.digimi://open";
         } else if (/Android/.test(navigator.userAgent)) {
                         //logToServer("Redirecting to Google Play", "info");
-            window.location.href = "vn.banvietbank.mobilebanking://open";
+            window.location.href = "intent://open#Intent;scheme=bvbankdigimi;package=vn.banvietbank.mobilebanking;end";
         }else{
             window.location.href = "bvbank.net.vn";
         }
@@ -43,7 +43,7 @@
           }
         }, 3000);
       };
-    </script>
+    </script> -->
   </head>
   <body>
     <img src="/images/logo.png" alt="logo">
