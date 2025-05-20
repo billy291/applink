@@ -43,7 +43,7 @@ public class DeepLinkController {
     //     return "retrieve";
     // }
 
-    private static final String ANDROID_PACKAGE = "vn.banvietbank.mobilebanking.uat";
+    private static final String ANDROID_PACKAGE = "vn.banvietbank.mobilebanking";
     private static final String ANDROID_FALLBACK = "https://play.google.com/store/apps/details?id=" + ANDROID_PACKAGE;
 
     private static final String IOS_BUNDLE = "bvb.digimi";
@@ -60,7 +60,7 @@ public class DeepLinkController {
 
         if (userAgent.toLowerCase().contains("android")) {
             // Android device
-            redirectUrl = "intent://bvbank.net.vn#Intent;scheme=bvbankdigimi;package=" + ANDROID_PACKAGE + ";end";
+            redirectUrl = "intent://open/home#Intent;scheme=bvbankdigimi;package=" + ANDROID_PACKAGE + ";end";
         } else if (userAgent.toLowerCase().contains("iphone") || userAgent.toLowerCase().contains("ipad")) {
             // iOS device
             // Use universal link if your app is associated with the domain
