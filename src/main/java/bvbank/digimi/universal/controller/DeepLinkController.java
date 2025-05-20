@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class DeepLinkController {
     private final DeepLinkService deepLinkService;
 
-    // @GetMapping("/{path}")
-    // public String handleDeepLink(HttpServletRequest servletRequest, Model model) {
-    //     String deeplinkUrl = deepLinkService.getAppDeepLink(servletRequest);
-    //     log.info("deeplinkUrl = {}", deeplinkUrl);
-    //     model.addAttribute("deeplinkUrl", deeplinkUrl);
-    //     return "index";
-    // }
+    @GetMapping("/{path}")
+    public String handleDeepLink(HttpServletRequest servletRequest, Model model) {
+        String deeplinkUrl = deepLinkService.getAppDeepLink(servletRequest);
+        log.info("deeplinkUrl = {}", deeplinkUrl);
+        model.addAttribute("deeplinkUrl", deeplinkUrl);
+        return "index";
+    }
 
     @GetMapping("/favicon.ico")
     @ResponseBody
@@ -29,9 +29,9 @@ public class DeepLinkController {
         //log.info("favicon block");
     }
 
-    // @GetMapping(value = "/retrieve-id", produces = MediaType.TEXT_HTML_VALUE)
-    // public String retrieveInstallId(Model model) throws Exception {
-    //     model.addAttribute("deeplinkSchema", deepLinkService.getdigimiSchema());
-    //     return "retrieve";
-    // }
+    @GetMapping(value = "/retrieve-id", produces = MediaType.TEXT_HTML_VALUE)
+    public String retrieveInstallId(Model model) throws Exception {
+        model.addAttribute("deeplinkSchema", deepLinkService.getdigimiSchema());
+        return "retrieve";
+    }
 }
