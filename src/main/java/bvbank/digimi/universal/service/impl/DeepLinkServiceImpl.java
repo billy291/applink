@@ -20,28 +20,28 @@ public class DeepLinkServiceImpl implements DeepLinkService {
 
     @Override
     public String getAppDeepLink(HttpServletRequest servletRequest) {
-
+        String scheme = getSchema(servletRequest);
         String fullPath = servletRequest.getRequestURI();
         if("/null".equals(fullPath)){
-            return digimiUrlSchema + "://open";
+            return scheme + "://open";
         }
         String queryString = servletRequest.getQueryString();
         String pathExtension = queryString != null ? fullPath + "?" + queryString: fullPath;
         if (pathExtension == null || pathExtension.isEmpty()) {
-            return digimiUrlSchema + "://open";
+            return scheme + "://open";
         }else if(pathExtension.startsWith("/")){
             pathExtension = pathExtension.substring(1);
         }
-        return digimiUrlSchema + "://" + pathExtension;
+        return scheme + "://" + pathExtension;
     }
 
 
     @Override
     public String getdigimiSchema() {
-        return digimiUrlSchema;
+        return digimiUrlSchemaAndroid;
     }
 
-    private String getFallbackUrl(HttpServletRequest servletRequest) {
+    private String getSchema(HttpServletRequest servletRequest) {
         String userAgent = servletRequest.getHeader("User-Agent");
         if (userAgent.toLowerCase().contains("iphone") || userAgent.toLowerCase().contains("ipad")|| userAgent.toLowerCase().contains("ipod")) 
         {
