@@ -19,6 +19,35 @@
         }
     </style>
     <script>
+        window.onload = function () {
+        const appScheme = "bvb.digimi://open";
+        const appStoreUrl = "https://apps.apple.com/app/id1526444697";
+        const androidStoreUrl =
+          "https://play.google.com/store/apps/details?id=com.example.myapp";
+ 
+        let appOpened = false;
+ 
+        document.addEventListener("visibilitychange", function () {
+          if (document.hidden) {
+            appOpened = true;
+          }
+        });
+ 
+        // Thử mở app
+        window.location = appScheme;
+ 
+        // Sau 2 giây, nếu app không mở thì redirect đến store
+            setTimeout(() => {
+              if (!appOpened) {
+                if (navigator.userAgent.match(/Android/i)) {
+                  window.location = androidStoreUrl;
+                } else {
+                  window.location = appStoreUrl;
+                }
+              }
+            }, 3000);
+        };
+
         function getQueryParam(param){
             const urlParam = new URLSearchParams(window.location.search);
             return urlParam.get(param);
@@ -78,7 +107,8 @@
         }
     </script>
 </head>
-<body onload="redirectToApp()">
+<!-- <body onload="redirectToApp()"> -->
+<body>
 <img src="/images/logo.png" alt="logo">
 <span id="deeplinkUrl" th:text="${deeplinkUrl}" th:attr="data-url=${deeplinkUrl}" style="display: none;"></span>
 </body>
