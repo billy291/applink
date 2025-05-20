@@ -62,9 +62,9 @@
                     //     localStorage.setItem("installId", id); // Lưu vào Local Storage
                     // }
 
-                    var deeplinkUrl = document.getElementById("deeplinkUrl").getAttribute("data-url");
-                    logToServer("Trying to open app with link: "+deeplinkUrl, "info");
-                    window.location.href = deeplinkUrl;
+                    // var deeplinkUrl = document.getElementById("deeplinkUrl").getAttribute("data-url");
+                    // logToServer("Trying to open app with link: "+deeplinkUrl, "info");
+                    // window.location.href = deeplinkUrl;
 
                     setTimeout(() => {
                         if (!appOpened) {
@@ -92,6 +92,6 @@
 </head>
 <body onload="redirectToApp()">
 <img src="/images/logo.png" alt="logo">
-<span id="deeplinkUrl" th:text="${deeplinkUrl}" th:attr="data-url=${deeplinkUrl}" style="display: none;"></span>
+<!-- <span id="deeplinkUrl" th:text="${deeplinkUrl}" th:attr="data-url=${deeplinkUrl}" style="display: none;"></span> -->
 </body>
 </html>
