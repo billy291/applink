@@ -43,7 +43,7 @@ public class DeepLinkController {
     //     return "retrieve";
     // }
 
-    private static final String ANDROID_PACKAGE = "vn.banvietbank.mobilebanking";
+    private static final String ANDROID_PACKAGE = "vn.banvietbank.mobilebanking.uat";
     private static final String ANDROID_FALLBACK = "https://play.google.com/store/apps/details?id=" + ANDROID_PACKAGE;
 
     private static final String IOS_BUNDLE = "bvb.digimi";
