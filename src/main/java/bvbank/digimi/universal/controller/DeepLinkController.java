@@ -60,7 +60,7 @@ public class DeepLinkController {
 
         if (userAgent.toLowerCase().contains("android")) {
             // Android device
-            redirectUrl = "intent://bvbank.net.vn#Intent;scheme=https;package=" + ANDROID_PACKAGE + ";end";
+            redirectUrl = "https://bvbank.net.vn#Intent;scheme=https;package=" + ANDROID_PACKAGE + ";end";
         } else if (userAgent.toLowerCase().contains("iphone") || userAgent.toLowerCase().contains("ipad")) {
             // iOS device
             // Use universal link if your app is associated with the domain
