@@ -49,7 +49,7 @@ public class DeepLinkController {
     private static final String IOS_BUNDLE = "bvb.digimi";
     private static final String IOS_FALLBACK = "https://apps.apple.com/vn/app/id1526444697";
 
-    private static final String WEB_URL = "https://vietcapitalbank.com.vn";
+    private static final String WEB_URL = "https://bvbank.net.vn";
 
     @GetMapping("/smartlink")
     public ResponseEntity<Void> handleSmartLink(@RequestHeader(value = "User-Agent") String userAgent,
@@ -60,7 +60,7 @@ public class DeepLinkController {
 
         if (userAgent.toLowerCase().contains("android")) {
             // Android device
-            redirectUrl = "intent://vietcapitalbank.com.vn#Intent;scheme=https;package=" + ANDROID_PACKAGE + ";end";
+            redirectUrl = "intent://bvbank.net.vn#Intent;scheme=https;package=" + ANDROID_PACKAGE + ";end";
         } else if (userAgent.toLowerCase().contains("iphone") || userAgent.toLowerCase().contains("ipad")) {
             // iOS device
             // Use universal link if your app is associated with the domain
