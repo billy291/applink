@@ -50,34 +50,36 @@
               if (document.hidden) {
                 logToServer("has open", "info");
                 appOpened = true;
-              }else{
-                const links = await getLinksFromServer();
+              }
+            });
+
+            const links = await getLinksFromServer();
                 if (!links)
                     return;
 
                 try {
-                    //var id = getQueryParam("installId"); // Lấy ID từ URL
-                    //logToServer("param id: "+id, "info");
-                    // if (id) {
-                    //     localStorage.setItem("installId", id); // Lưu vào Local Storage
-                    // }
+                    var id = getQueryParam("installId"); // Lấy ID từ URL
+                    logToServer("param id: "+id, "info");
+                    if (id) {
+                        localStorage.setItem("installId", id); // Lưu vào Local Storage
+                    }
 
-                    // var deeplinkUrl = document.getElementById("deeplinkUrl").getAttribute("data-url");
-                    // logToServer("Trying to open app with link: "+deeplinkUrl, "info");
-                    // window.location.href = deeplinkUrl;
+                    var deeplinkUrl = document.getElementById("deeplinkUrl").getAttribute("data-url");
+                    logToServer("Trying to open app with link: "+deeplinkUrl, "info");
+                    window.location = deeplinkUrl;
 
                     setTimeout(() => {
                         if (!appOpened) {
                             //logToServer("Checking device type for fallback...", "info");
                             if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
                                 //logToServer("Redirecting to App Store...", "info");
-                                window.location.href = links.ios;
+                                window.location = links.ios;
                             } else if (/Android/.test(navigator.userAgent)) {
                                 //logToServer("Redirecting to Google Play", "info");
-                                window.location.href = links.android;
+                                window.location = links.android;
                             }else{
                                 //logToServer("Redirecting to fallback website...", "info");
-                                window.location.href = links.desktop;
+                                window.location = links.desktop;
                             }
                         }
                     }, 1000);
@@ -85,13 +87,11 @@
                 } catch (error) {
                     logToServer("Error retrieving app link: " + error.message, "error");
                 }
-              }
-            });
         }
     </script>
 </head>
 <body onload="redirectToApp()">
 <img src="/images/logo.png" alt="logo">
-<!-- <span id="deeplinkUrl" th:text="${deeplinkUrl}" th:attr="data-url=${deeplinkUrl}" style="display: none;"></span> -->
+<span id="deeplinkUrl" th:text="${deeplinkUrl}" th:attr="data-url=${deeplinkUrl}" style="display: none;"></span>
 </body>
 </html>
