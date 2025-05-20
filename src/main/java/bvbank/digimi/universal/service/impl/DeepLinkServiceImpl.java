@@ -11,43 +11,39 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class DeepLinkServiceImpl implements DeepLinkService {
-
-    @Value("${app.digimi.url-schema-android}")
-    private String digimiUrlSchema;
-
     @Value("${app.digimi.url-schema-ios}")
     private String digimiUrlSchemaIos;
 
+    @Value("${app.digimi.url-schema-android}")
+    private String digimiUrlSchemaAndroid;
+
     @Override
     public String getAppDeepLink(HttpServletRequest servletRequest) {
+        String urlSchema = getSchema(servletRequest);
         String fullPath = servletRequest.getRequestURI();
-        String schema = getSchema(servletRequest);
-        if("/null".equals(fullPath)){
-            return schema + "://open";
-        }
         String queryString = servletRequest.getQueryString();
         String pathExtension = queryString != null ? fullPath + "?" + queryString: fullPath;
-        if (pathExtension == null || pathExtension.isEmpty()) {
-            return schema + "://open";
+        if (pathExtension == null || pathExtension.isEmpty() || pathExtension.startsWith("/null")) {
+            return urlSchema + "://open";
         }else if(pathExtension.startsWith("/")){
             pathExtension = pathExtension.substring(1);
         }
-        return schema + "://" + pathExtension;
+        return urlSchema + "://" + pathExtension;
     }
 
     @Override
-    public String getdigimiSchema() {
-        return digimiUrlSchema;
+    public String getdigimiSchema(HttpServletRequest servletRequest) {
+        return getSchema(servletRequest);
     }
 
-    private String getSchema(HttpServletRequest servletRequest) {    
-        String userAgent = servletRequest.getHeader("User-Agent");    
-        if (userAgent.toLowerCase().contains("iphone") || userAgent.toLowerCase().contains("ipad")|| userAgent.toLowerCase().contains("ipod")) {  
-                  return digimiUrlSchemaIos;    
-        } 
-        return digimiUrlSchemaAndroid;  
-        // else if (userAgent.toLowerCase().contains("android")) {
-        //     return digimiUrlSchemaAndroid;    
-        // }
- 
+    private String getSchema(HttpServletRequest servletRequest) {
+        String userAgent = servletRequest.getHeader("User-Agent");
+        if (userAgent.toLowerCase().contains("iphone") || userAgent.toLowerCase().contains("ipad")|| userAgent.toLowerCase().contains("ipod")) {
+            return digimiUrlSchemaIos;
+        }
+//        else if (userAgent.toLowerCase().contains("android")) {
+//            return digimiUrlSchemaAndroid;
+//        }
+        return digimiUrlSchemaAndroid;
+    }
 }

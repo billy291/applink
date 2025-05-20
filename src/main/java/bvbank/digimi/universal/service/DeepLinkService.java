@@ -4,5 +4,5 @@ import jakarta.servlet.http.HttpServletRequest;
 
 public interface DeepLinkService {
     String getAppDeepLink(HttpServletRequest servletRequest);
-    String getdigimiSchema();
+    String getdigimiSchema(HttpServletRequest servletRequest);
 }
