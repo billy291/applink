@@ -43,6 +43,15 @@
         }
         async function redirectToApp() {
             logToServer("Starting redirect to app...", "info");
+
+            let appOpened = false;
+ 
+            document.addEventListener("visibilitychange", function () {
+              if (document.hidden) {
+                appOpened = true;
+              }
+            });
+
             const links = await getLinksFromServer();
             if (!links)
                 return;
@@ -59,16 +68,18 @@
                 window.location.href = deeplinkUrl;
 
                 setTimeout(() => {
-                    //logToServer("Checking device type for fallback...", "info");
-                    if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
-                        //logToServer("Redirecting to App Store...", "info");
-                        window.location.href = links.ios;
-                    } else if (/Android/.test(navigator.userAgent)) {
-                        //logToServer("Redirecting to Google Play", "info");
-                        window.location.href = links.android;
-                    }else{
-                        //logToServer("Redirecting to fallback website...", "info");
-                        window.location.href = links.desktop;
+                    if (!appOpened) {
+                        //logToServer("Checking device type for fallback...", "info");
+                        if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+                            //logToServer("Redirecting to App Store...", "info");
+                            window.location.href = links.ios;
+                        } else if (/Android/.test(navigator.userAgent)) {
+                            //logToServer("Redirecting to Google Play", "info");
+                            window.location.href = links.android;
+                        }else{
+                            //logToServer("Redirecting to fallback website...", "info");
+                            window.location.href = links.desktop;
+                        }
                     }
                 }, 1000);
 
