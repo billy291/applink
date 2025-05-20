@@ -65,7 +65,7 @@ public class DeepLinkController {
             // iOS device
             // Use universal link if your app is associated with the domain
             redirectUrl = WEB_URL;
-            response.setHeader("Location", redirectUrl);
+            response.setHeader("Location", "bvb.digimi://open");
             response.setStatus(302);
             response.setHeader("apple-itunes-app", "app-id=1526444697");
             return ResponseEntity.status(302).build();
