@@ -8,7 +8,7 @@
         const appScheme = "bvb.digimi://open";
         const appStoreUrl = "https://apps.apple.com/app/id1526444697";
         const androidStoreUrl =
-          "https://play.google.com/store/apps/details?id=com.example.myapp";
+          "https://play.google.com/store/apps/details?id=vn.banvietbank.mobilebanking";
  
         let appOpened = false;
  
@@ -25,7 +25,7 @@
             window.location = "bvb.digimi://open";
         } else if (/Android/.test(navigator.userAgent)) {
                         //logToServer("Redirecting to Google Play", "info");
-            window.location.href = "bvbankdigimi://open";
+            window.location.href = "vn.banvietbank.mobilebanking://open";
         }else{
             window.location.href = "bvbank.net.vn";
         }
