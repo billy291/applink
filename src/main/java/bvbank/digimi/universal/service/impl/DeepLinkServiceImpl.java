@@ -44,6 +44,30 @@ public class DeepLinkServiceImpl implements DeepLinkService {
                 .build();
     }
 
+    @Override
+    public ResponseEntity<Void> handTest(String userAgent, String referer, HttpServletRequest servletRequest, HttpServletResponse servletResponse) {
+        String redirectUrl = fallbackProperties.getDesktop();
+        try{
+            String extensionQueryPath = getExtensionQueryPath(servletRequest);
+            if (userAgent.toLowerCase().contains("android")) {
+                // Android device
+                redirectUrl = String.format("intent://%s#Intent;scheme=%s;package=%s.uat;end", extensionQueryPath, digimiProperties.getUrlSchemaAndroid(), digimiProperties.getIdAndroid());
+            } else if (userAgent.toLowerCase().contains("iphone") || userAgent.toLowerCase().contains("ipad") || userAgent.toLowerCase().contains("ipod")) {
+                // iOS device
+                // Use universal link if your app is associated with the domain
+                servletResponse.setHeader("Location", String.format("%s://%s", digimiProperties.getUrlSchemaIos(),extensionQueryPath));
+                servletResponse.setStatus(302);
+                servletResponse.setHeader("apple-itunes-app", String.format("app-id=%s", digimiProperties.getIdIos()));
+                return ResponseEntity.status(302).build();
+            }
+        }catch (Exception ex){
+            log.error("handleDigimi exception {}", ex.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .location(URI.create(redirectUrl))
+                .build();
+    }
+
     private String getExtensionQueryPath(HttpServletRequest servletRequest) {
         String fullPath = servletRequest.getRequestURI();
         String queryString = servletRequest.getQueryString();
