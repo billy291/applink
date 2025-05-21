@@ -1,4 +1,4 @@
-package bvbank.digimi.universal.config;
+package bvbank.digimi.universal.properties;
 
 
 import lombok.Data;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Data
 @Component
 @ConfigurationProperties(prefix = "app.fallback")
-public class FallbackConfig {
+public class FallbackProperties {
     private String ios;
     private String android;
     private String desktop;

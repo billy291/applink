@@ -1,49 +1,58 @@
 package bvbank.digimi.universal.service.impl;
 
+import bvbank.digimi.universal.properties.FallbackProperties;
+import bvbank.digimi.universal.properties.DigimiProperties;
 import bvbank.digimi.universal.service.DeepLinkService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.net.URI;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class DeepLinkServiceImpl implements DeepLinkService {
-    @Value("${app.digimi.url-schema-ios}")
-    private String digimiUrlSchemaIos;
-
-    @Value("${app.digimi.url-schema-android}")
-    private String digimiUrlSchemaAndroid;
+    private final DigimiProperties digimiProperties;
+    private final FallbackProperties fallbackProperties;
 
     @Override
-    public String getAppDeepLink(HttpServletRequest servletRequest) {
-        String urlSchema = getSchema(servletRequest);
+    public ResponseEntity<Void> handleDigimi(String userAgent, String referer, HttpServletRequest servletRequest, HttpServletResponse servletResponse) {
+        String redirectUrl = fallbackProperties.getDesktop();
+        try{
+            String extensionQueryPath = getExtensionQueryPath(servletRequest);
+            if (userAgent.toLowerCase().contains("android")) {
+                // Android device
+                redirectUrl = String.format("intent://%s#Intent;scheme=%s;package=%s;end", extensionQueryPath, digimiProperties.getUrlSchemaAndroid(), digimiProperties.getIdAndroid());
+            } else if (userAgent.toLowerCase().contains("iphone") || userAgent.toLowerCase().contains("ipad") || userAgent.toLowerCase().contains("ipod")) {
+                // iOS device
+                // Use universal link if your app is associated with the domain
+                servletResponse.setHeader("Location", String.format("%s://%s", digimiProperties.getUrlSchemaIos(),extensionQueryPath));
+                servletResponse.setStatus(302);
+                servletResponse.setHeader("apple-itunes-app", String.format("app-id=%s", digimiProperties.getIdIos()));
+                return ResponseEntity.status(302).build();
+            }
+        }catch (Exception ex){
+            log.error("handleDigimi exception {}", ex.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .location(URI.create(redirectUrl))
+                .build();
+    }
+
+    private String getExtensionQueryPath(HttpServletRequest servletRequest) {
         String fullPath = servletRequest.getRequestURI();
         String queryString = servletRequest.getQueryString();
         String pathExtension = queryString != null ? fullPath + "?" + queryString: fullPath;
         if (pathExtension == null || pathExtension.isEmpty() || pathExtension.startsWith("/null")) {
-            return urlSchema + "://open";
+            return "open";
         }else if(pathExtension.startsWith("/")){
             pathExtension = pathExtension.substring(1);
         }
-        return urlSchema + "://" + pathExtension;
-    }
-
-    @Override
-    public String getdigimiSchema(HttpServletRequest servletRequest) {
-        return getSchema(servletRequest);
-    }
-
-    private String getSchema(HttpServletRequest servletRequest) {
-        String userAgent = servletRequest.getHeader("User-Agent");
-        if (userAgent.toLowerCase().contains("iphone") || userAgent.toLowerCase().contains("ipad")|| userAgent.toLowerCase().contains("ipod")) {
-            return digimiUrlSchemaIos;
-        }
-//        else if (userAgent.toLowerCase().contains("android")) {
-//            return digimiUrlSchemaAndroid;
-//        }
-        return digimiUrlSchemaAndroid;
+        return pathExtension;
     }
 }

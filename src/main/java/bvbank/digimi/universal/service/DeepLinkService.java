@@ -1,8 +1,9 @@
 package bvbank.digimi.universal.service;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.ResponseEntity;
 
 public interface DeepLinkService {
-    String getAppDeepLink(HttpServletRequest servletRequest);
-    String getdigimiSchema(HttpServletRequest servletRequest);
+    ResponseEntity<Void> handleDigimi(String userAgent, String referer, HttpServletRequest servletRequest, HttpServletResponse servletResponse);
 }
