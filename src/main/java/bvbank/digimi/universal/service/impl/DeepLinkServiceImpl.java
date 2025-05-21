@@ -48,7 +48,7 @@ public class DeepLinkServiceImpl implements DeepLinkService {
     }
 
     @Override
-    public ResponseEntity<Void> handTest(String userAgent, String referer, HttpServletRequest servletRequest, HttpServletResponse servletResponse) {
+    public ResponseEntity<Void> handleTest(String userAgent, String referer, HttpServletRequest servletRequest, HttpServletResponse servletResponse) {
         String redirectUrl = fallbackProperties.getDesktop();
         try{
             String extensionQueryPath = getExtensionQueryPath(servletRequest);
@@ -58,8 +58,8 @@ public class DeepLinkServiceImpl implements DeepLinkService {
                 log.info("Android - {}", redirectUrl);
             } else if (userAgent.toLowerCase().contains("iphone") || userAgent.toLowerCase().contains("ipad") || userAgent.toLowerCase().contains("ipod")) {
                 // iOS device
-                // Use universal link if your app is associated with the domain\
-                redirectUrl = String.format("%s://%s", digimiProperties.getUrlSchemaAndroid(),extensionQueryPath)
+                // Use universal link if your app is associated with the domain
+                redirectUrl = String.format("%s://%s", digimiProperties.getUrlSchemaAndroid(),extensionQueryPath);
                 log.info("iOS - {}", redirectUrl);
                 servletResponse.setHeader("Location", redirectUrl);
                 servletResponse.setStatus(302);
