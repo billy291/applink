@@ -55,7 +55,7 @@ public class DeepLinkServiceImpl implements DeepLinkService {
             } else if (userAgent.toLowerCase().contains("iphone") || userAgent.toLowerCase().contains("ipad") || userAgent.toLowerCase().contains("ipod")) {
                 // iOS device
                 // Use universal link if your app is associated with the domain
-                servletResponse.setHeader("Location", String.format("%s://%s", digimiProperties.getUrlSchemaIos(),extensionQueryPath));
+                servletResponse.setHeader("Location", String.format("%s://%s", digimiProperties.getUrlSchemaAndroid(),extensionQueryPath));
                 servletResponse.setStatus(302);
                 servletResponse.setHeader("apple-itunes-app", String.format("app-id=%s", digimiProperties.getIdIos()));
                 return ResponseEntity.status(302).build();
