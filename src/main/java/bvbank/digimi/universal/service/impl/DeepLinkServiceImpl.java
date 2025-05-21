@@ -28,10 +28,13 @@ public class DeepLinkServiceImpl implements DeepLinkService {
             if (userAgent.toLowerCase().contains("android")) {
                 // Android device
                 redirectUrl = String.format("intent://%s#Intent;scheme=%s;package=%s;end", extensionQueryPath, digimiProperties.getUrlSchemaAndroid(), digimiProperties.getIdAndroid());
+                log.info("Android - {}", redirectUrl);
             } else if (userAgent.toLowerCase().contains("iphone") || userAgent.toLowerCase().contains("ipad") || userAgent.toLowerCase().contains("ipod")) {
                 // iOS device
                 // Use universal link if your app is associated with the domain
-                servletResponse.setHeader("Location", String.format("%s://%s", digimiProperties.getUrlSchemaIos(),extensionQueryPath));
+                redirectUrl = String.format("%s://%s", digimiProperties.getUrlSchemaIos(),extensionQueryPath);
+                log.info("iOS - {}", redirectUrl);
+                servletResponse.setHeader("Location", redirectUrl);
                 servletResponse.setStatus(302);
                 servletResponse.setHeader("apple-itunes-app", String.format("app-id=%s", digimiProperties.getIdIos()));
                 return ResponseEntity.status(302).build();
@@ -52,10 +55,13 @@ public class DeepLinkServiceImpl implements DeepLinkService {
             if (userAgent.toLowerCase().contains("android")) {
                 // Android device
                 redirectUrl = String.format("intent://%s#Intent;scheme=%s;package=%s.uat;end", extensionQueryPath, digimiProperties.getUrlSchemaAndroid(), digimiProperties.getIdAndroid());
+                log.info("Android - {}", redirectUrl);
             } else if (userAgent.toLowerCase().contains("iphone") || userAgent.toLowerCase().contains("ipad") || userAgent.toLowerCase().contains("ipod")) {
                 // iOS device
-                // Use universal link if your app is associated with the domain
-                servletResponse.setHeader("Location", String.format("%s://%s", digimiProperties.getUrlSchemaAndroid(),extensionQueryPath));
+                // Use universal link if your app is associated with the domain\
+                redirectUrl = String.format("%s://%s", digimiProperties.getUrlSchemaAndroid(),extensionQueryPath)
+                log.info("iOS - {}", redirectUrl);
+                servletResponse.setHeader("Location", redirectUrl);
                 servletResponse.setStatus(302);
                 servletResponse.setHeader("apple-itunes-app", String.format("app-id=%s", digimiProperties.getIdIos()));
                 return ResponseEntity.status(302).build();
