@@ -34,9 +34,20 @@ public class DeepLinkServiceImpl implements DeepLinkService {
                 // Use universal link if your app is associated with the domain
                 redirectUrl = String.format("%s://%s", digimiProperties.getUrlSchemaIos(),extensionQueryPath);
                 log.info("iOS - {}", redirectUrl);
-                servletResponse.setHeader("Location", redirectUrl);
+                // servletResponse.setHeader("Location", redirectUrl);
+                // servletResponse.setStatus(302);
+                // servletResponse.setHeader("apple-itunes-app", String.format("app-id=%s", digimiProperties.getIdIos()));
+                // return ResponseEntity.status(302).build();
+
+                String scheme = servletRequest.getScheme();             // http hoặc https
+                String serverName = servletRequest.getServerName();     // domain hoặc IP
+                int serverPort = servletRequest.getServerPort();        // port (nếu cần)
+                String contextPath = servletRequest.getContextPath();   // context path nếu có
+
+                String landingPageUrl = scheme + "://" + serverName + contextPath + "/open-app.html?param=" + extensionQueryPath;
+                log.info("handleDigimi open landing pay {}", landingPageUrl);
+                servletResponse.setHeader("Location", landingPageUrl);
                 servletResponse.setStatus(302);
-                servletResponse.setHeader("apple-itunes-app", String.format("app-id=%s", digimiProperties.getIdIos()));
                 return ResponseEntity.status(302).build();
             }
         }catch (Exception ex){
@@ -72,6 +83,7 @@ public class DeepLinkServiceImpl implements DeepLinkService {
                 String contextPath = servletRequest.getContextPath();   // context path nếu có
 
                 String landingPageUrl = scheme + "://" + serverName + contextPath + "/open-app.html?param=" + extensionQueryPath;
+                log.info("handleDigimi open landing pay {}", landingPageUrl);
                 servletResponse.setHeader("Location", landingPageUrl);
                 servletResponse.setStatus(302);
                 return ResponseEntity.status(302).build();
