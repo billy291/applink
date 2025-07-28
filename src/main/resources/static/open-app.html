@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Mở ứng dụng Digimi</title>
+  <script type="text/javascript">
+    function isIOS() {
+      return /iphone|ipad|ipod/i.test(navigator.userAgent);
+    }
+
+    function openApp() {
+      if (!isIOS()) {
+        // Nếu không phải iOS thì không làm gì cả
+        return;
+      }
+      var now = Date.now();
+      // Thử mở app qua custom scheme
+      window.location = "bvb.digimi://openApp"; // Thay bằng scheme và path của bạn
+
+      // Nếu sau 2s mà app chưa mở (tức là app chưa cài), chuyển sang App Store
+      setTimeout(function () {
+        if (Date.now() - now < 2100) {
+          window.location = "https://apps.apple.com/app/id1526444697"; // Thay YOUR_APP_ID bằng App Store ID của bạn
+        }
+      }, 2000);
+    }
+  </script>
+</head>
+<body onload="openApp()">
+  <img src="/images/logo.png" alt="logo">
+</body>
+</html>
