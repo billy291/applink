@@ -46,7 +46,7 @@ public class DeepLinkServiceImpl implements DeepLinkService {
 
                 String landingPageUrl = scheme + "://" + serverName + contextPath + "/open-app.html?param=" + extensionQueryPath;
                 log.info("handleDigimi open landing pay {}", landingPageUrl);
-                servletResponse.setHeader("Location", landingPageUrl);
+                servletResponse.setHeader("Location", "https://apps.apple.com/app/id1526444697");
                 servletResponse.setStatus(302);
                 return ResponseEntity.status(302).build();
             }
