@@ -59,11 +59,21 @@ public class DeepLinkServiceImpl implements DeepLinkService {
             } else if (userAgent.toLowerCase().contains("iphone") || userAgent.toLowerCase().contains("ipad") || userAgent.toLowerCase().contains("ipod")) {
                 // iOS device
                 // Use universal link if your app is associated with the domain
-                redirectUrl = String.format("%s://%s", digimiProperties.getUrlSchemaAndroid(),extensionQueryPath);
-                log.info("iOS - {}", redirectUrl);
-                servletResponse.setHeader("Location", redirectUrl);
+                // redirectUrl = String.format("%s://%s", digimiProperties.getUrlSchemaAndroid(),extensionQueryPath);
+                // log.info("iOS - {}", redirectUrl);
+                // servletResponse.setHeader("Location", redirectUrl);
+                // servletResponse.setStatus(302);
+                // servletResponse.setHeader("apple-itunes-app", String.format("app-id=%s", digimiProperties.getIdIos()));
+                // return ResponseEntity.status(302).build();
+
+                String scheme = servletRequest.getScheme();             // http hoặc https
+                String serverName = servletRequest.getServerName();     // domain hoặc IP
+                int serverPort = servletRequest.getServerPort();        // port (nếu cần)
+                String contextPath = servletRequest.getContextPath();   // context path nếu có
+
+                String landingPageUrl = scheme + "://" + serverName + contextPath + "/open-app.html?param=" + extensionQueryPath;
+                servletResponse.setHeader("Location", landingPageUrl);
                 servletResponse.setStatus(302);
-                servletResponse.setHeader("apple-itunes-app", String.format("app-id=%s", digimiProperties.getIdIos()));
                 return ResponseEntity.status(302).build();
             }
         }catch (Exception ex){
