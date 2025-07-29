@@ -35,19 +35,24 @@ public class DeepLinkServiceImpl implements DeepLinkService {
             String extensionQueryPath = getExtensionQueryPath(servletRequest);
             if (userAgent.toLowerCase().contains("android")) {
                 // Android device
-                redirectUrl = String.format("intent://%s#Intent;scheme=%s;package=%s;end", extensionQueryPath, digimiProperties.getUrlSchemaAndroid(), digimiProperties.getIdAndroid());
+                // redirectUrl = String.format("intent://%s#Intent;scheme=%s;package=%s;end", extensionQueryPath, digimiProperties.getUrlSchemaAndroid(), digimiProperties.getIdAndroid());
 
-                String fallbackUrl = "https://play.google.com/store/apps/details?id=" + digimiProperties.getIdAndroid();
+                // String fallbackUrl = "https://play.google.com/store/apps/details?id=" + digimiProperties.getIdAndroid();
 
-                redirectUrl = String.format(
-                        "intent://%s#Intent;scheme=%s;package=%s;S.browser_fallback_url=%s;end",
-                        extensionQueryPath,
-                        digimiProperties.getUrlSchemaAndroid(),
-                        digimiProperties.getIdAndroid(),
-                        URLEncoder.encode(fallbackUrl, StandardCharsets.UTF_8)
-                );
-                log.info("Android intent with fallback - {}", redirectUrl);
+                // redirectUrl = String.format(
+                //         "intent://%s#Intent;scheme=%s;package=%s;S.browser_fallback_url=%s;end",
+                //         extensionQueryPath,
+                //         digimiProperties.getUrlSchemaAndroid(),
+                //         digimiProperties.getIdAndroid(),
+                //         URLEncoder.encode(fallbackUrl, StandardCharsets.UTF_8)
+                // );
+                // log.info("Android intent with fallback - {}", redirectUrl);
 
+
+                
+                servletResponse.setHeader("Location", "https://play.google.com/store/apps/details?id=vn.banvietbank.mobilebanking");
+                servletResponse.setStatus(HttpStatus.FOUND.value());
+                return ResponseEntity.status(HttpStatus.FOUND).build();
 
             } else if (userAgent.toLowerCase().contains("iphone") || userAgent.toLowerCase().contains("ipad") || userAgent.toLowerCase().contains("ipod")) {
                 // iOS device
