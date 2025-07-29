@@ -35,13 +35,13 @@ public class DeepLinkController {
         return deepLinkService.handleDigimi(userAgent, referer, servletRequest, servletResponse);
     }
 
-    @GetMapping("/test/{path}")
-    public ResponseEntity<Void> HandleDeepLinkDigimiTest(@RequestHeader(value = "User-Agent") String userAgent,
-                                                     @RequestHeader(value = "Referer", required = false) String referer,
-                                                     @PathVariable String path,
-                                                     HttpServletRequest servletRequest,
-                                                     HttpServletResponse servletResponse) throws IOException {
+    // @GetMapping("/test/{path}")
+    // public ResponseEntity<Void> HandleDeepLinkDigimiTest(@RequestHeader(value = "User-Agent") String userAgent,
+    //                                                  @RequestHeader(value = "Referer", required = false) String referer,
+    //                                                  @PathVariable String path,
+    //                                                  HttpServletRequest servletRequest,
+    //                                                  HttpServletResponse servletResponse) throws IOException {
 
-        return deepLinkService.handleTest(userAgent, referer, servletRequest, servletResponse);
-    }
+    //     return deepLinkService.handleTest(userAgent, referer, servletRequest, servletResponse);
+    // }
 }
