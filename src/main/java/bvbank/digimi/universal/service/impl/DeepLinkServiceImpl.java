@@ -11,7 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.net.URI;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @Service
@@ -21,85 +24,42 @@ public class DeepLinkServiceImpl implements DeepLinkService {
     private final FallbackProperties fallbackProperties;
 
     @Override
+    public void redirectUnknown(HttpServletResponse response) throws IOException {
+        response.sendRedirect(fallbackProperties.getDesktop());
+    }
+
+    @Override
     public ResponseEntity<Void> handleDigimi(String userAgent, String referer, HttpServletRequest servletRequest, HttpServletResponse servletResponse) {
         String redirectUrl = fallbackProperties.getDesktop();
         try{
             String extensionQueryPath = getExtensionQueryPath(servletRequest);
             if (userAgent.toLowerCase().contains("android")) {
                 // Android device
-                //redirectUrl = String.format("intent://%s#Intent;scheme=%s;package=%s;end", extensionQueryPath, digimiProperties.getUrlSchemaAndroid(), digimiProperties.getIdAndroid());
-                
-                
-                String fallbackUrl = "https://play.google.com/store/apps/details?id=vn.banvietbank.mobilebanking";
+                redirectUrl = String.format("intent://%s#Intent;scheme=%s;package=%s;end", extensionQueryPath, digimiProperties.getUrlSchemaAndroid(), digimiProperties.getIdAndroid());
 
-    redirectUrl = String.format(
-        "intent://%s#Intent;scheme=%s;package=%s;S.browser_fallback_url=%s;end",
-        extensionQueryPath,
-        digimiProperties.getUrlSchemaAndroid(), // ví dụ: digimi
-        digimiProperties.getIdAndroid(),
-        URLEncoder.encode(fallbackUrl, StandardCharsets.UTF_8)
-    );
-    log.info("Android intent with fallback - {}", redirectUrl);
-                
-                log.info("Android - {}", redirectUrl);
+                String fallbackUrl = "https://play.google.com/store/apps/details?id=" + digimiProperties.getIdAndroid();
+
+                redirectUrl = String.format(
+                        "intent://%s#Intent;scheme=%s;package=%s;S.browser_fallback_url=%s;end",
+                        extensionQueryPath,
+                        digimiProperties.getUrlSchemaAndroid(),
+                        digimiProperties.getIdAndroid(),
+                        URLEncoder.encode(fallbackUrl, StandardCharsets.UTF_8)
+                );
+                log.info("Android intent with fallback - {}", redirectUrl);
+
+
             } else if (userAgent.toLowerCase().contains("iphone") || userAgent.toLowerCase().contains("ipad") || userAgent.toLowerCase().contains("ipod")) {
                 // iOS device
                 // Use universal link if your app is associated with the domain
-                redirectUrl = String.format("%s://%s", digimiProperties.getUrlSchemaIos(),extensionQueryPath);
-                log.info("iOS - {}", redirectUrl);
-                // servletResponse.setHeader("Location", redirectUrl);
-                // servletResponse.setStatus(302);
-                // servletResponse.setHeader("apple-itunes-app", String.format("app-id=%s", digimiProperties.getIdIos()));
-                // return ResponseEntity.status(302).build();
+//                servletResponse.setHeader("Location", String.format("%s://%s", digimiProperties.getUrlSchemaIos(),extensionQueryPath));
+//                servletResponse.setStatus(302);
+//                servletResponse.setHeader("apple-itunes-app", String.format("app-id=%s", digimiProperties.getIdIos()));
+//                return ResponseEntity.status(302).build();
 
-                String scheme = servletRequest.getScheme();             // http hoặc https
-                String serverName = servletRequest.getServerName();     // domain hoặc IP
-                int serverPort = servletRequest.getServerPort();        // port (nếu cần)
-                String contextPath = servletRequest.getContextPath();   // context path nếu có
-
-                String landingPageUrl = scheme + "://" + serverName + contextPath + "/open-app.html?param=" + extensionQueryPath;
-                log.info("handleDigimi open landing pay {}", landingPageUrl);
-                servletResponse.setHeader("Location", "https://apps.apple.com/app/id1526444697");
-                servletResponse.setStatus(302);
-                return ResponseEntity.status(302).build();
-            }
-        }catch (Exception ex){
-            log.error("handleDigimi exception {}", ex.getMessage());
-        }
-        return ResponseEntity.status(HttpStatus.FOUND)
-                .location(URI.create(redirectUrl))
-                .build();
-    }
-
-    @Override
-    public ResponseEntity<Void> handleTest(String userAgent, String referer, HttpServletRequest servletRequest, HttpServletResponse servletResponse) {
-        String redirectUrl = fallbackProperties.getDesktop();
-        try{
-            String extensionQueryPath = getExtensionQueryPath(servletRequest);
-            if (userAgent.toLowerCase().contains("android")) {
-                // Android device
-                redirectUrl = String.format("intent://%s#Intent;scheme=%s;package=%s.uat;end", extensionQueryPath, digimiProperties.getUrlSchemaAndroid(), digimiProperties.getIdAndroid());
-                log.info("Android - {}", redirectUrl);
-            } else if (userAgent.toLowerCase().contains("iphone") || userAgent.toLowerCase().contains("ipad") || userAgent.toLowerCase().contains("ipod")) {
-                // iOS device
-                // Use universal link if your app is associated with the domain
-                // redirectUrl = String.format("%s://%s", digimiProperties.getUrlSchemaAndroid(),extensionQueryPath);
-                // log.info("iOS - {}", redirectUrl);
-                // servletResponse.setHeader("Location", redirectUrl);
-                // servletResponse.setStatus(302);
-                // servletResponse.setHeader("apple-itunes-app", String.format("app-id=%s", digimiProperties.getIdIos()));
-                // return ResponseEntity.status(302).build();
-
-                String scheme = servletRequest.getScheme();             // http hoặc https
-                String serverName = servletRequest.getServerName();     // domain hoặc IP
-                int serverPort = servletRequest.getServerPort();        // port (nếu cần)
-                String contextPath = servletRequest.getContextPath();   // context path nếu có
-
-                String landingPageUrl = scheme + "://" + serverName + contextPath + "/open-app.html?param=" + extensionQueryPath;
-                log.info("handleDigimi open landing pay {}", landingPageUrl);
-                servletResponse.setHeader("Location", landingPageUrl);
-                servletResponse.setStatus(302);
-                return ResponseEntity.status(302).build();
+                servletResponse.setHeader("Location", fallbackProperties.getIos());
+                servletResponse.setStatus(HttpStatus.FOUND.value());
+                return ResponseEntity.status(HttpStatus.FOUND).build();
             }
         }catch (Exception ex){
             log.error("handleDigimi exception {}", ex.getMessage());
